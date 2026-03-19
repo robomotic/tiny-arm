@@ -1,4 +1,16 @@
 <mujoco model="follower_arm">
+    <visual>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <global azimuth="120" elevation="-20"/>
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="512"/>
+        <texture name="grid" type="2d" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" width="512" height="512"/>
+        <material name="floor_mat" texture="grid" texrepeat="1 1" texuniform="true" reflectance="0.2"/>
+    </asset>
+
     <default>
         <joint armature="0.01" damping="0.1" limited="true"/>
         <geom conaffinity="1" condim="3" density="100" friction="1 0.5 0.5" margin="0.001" rgba="0.2 0.2 0.8 1"/>
@@ -7,33 +19,52 @@
     </default>
 
     <worldbody>
+        <!-- Environment -->
+        <light dir="-0 0 -1" pos="0 0 1.5" castshadow="false"/>
+        <geom name="floor" type="plane" size="0.4 0.4 0.1" material="floor_mat" rgba="1 1 1 1" pos="0 0 -0.01"/>
+
+        <!-- World Frame XYZ: Z is UP, X is FORWARD, Y is LEFT -->
         <body name="f_base" pos="0 0 0">
+            <!-- J1 aligns with Z -->
             <geom name="f_base_geom" type="cylinder" size="0.03 0.01"/>
             <joint name="f_joint1" type="hinge" axis="0 0 1" range="-170 170"/>
             
             <body name="f_shoulder" pos="0 0 0.02">
-                <geom name="f_shoulder_geom" type="box" size="0.015 0.015 0.02"/>
+                <!-- J2 aligns with Y (Pitch) -->
+                <geom name="f_shoulder_geom" type="box" size="0.015 0.015 0.02" pos="0 0 0"/>
                 <joint name="f_joint2" type="hinge" axis="0 1 0" range="-90 90"/>
                 
-                <body name="f_upper_arm" pos="0 0 0.04">
-                    <geom name="f_upper_arm_geom" type="cylinder" size="0.005 0.05" rgba="0.5 0.5 1 1" pos="0 0 0.025"/>
-                    <body name="f_elbow" pos="0 0 0.05">
-                        <geom name="f_elbow_geom" type="box" size="0.015 0.015 0.01"/>
+                <body name="f_upper_arm" pos="0 0 0">
+                    <!-- L1 = 12cm -->
+                    <geom name="f_upper_arm_geom" type="cylinder" size="0.005 0.06" rgba="0.5 0.5 1 1" pos="0 0 0.06"/>
+                    
+                    <body name="f_elbow" pos="0 0 0.12">
+                        <!-- J3 aligns with Y (Pitch) -->
+                        <geom name="f_elbow_geom" type="box" size="0.015 0.015 0.01" pos="0 0 0"/>
                         <joint name="f_joint3" type="hinge" axis="0 1 0" range="-120 120"/>
                         
-                        <body name="f_forearm" pos="0 0 0.02">
-                            <geom name="f_forearm_geom" type="cylinder" size="0.005 0.04" rgba="0.5 0.5 1 1" pos="0 0 0.02"/>
-                            <body name="f_wrist" pos="0 0 0.04">
-                                <geom name="f_wrist_geom" type="box" size="0.01 0.01 0.01"/>
+                        <body name="f_forearm" pos="0 0 0">
+                            <!-- L2 = 12cm -->
+                            <geom name="f_forearm_geom" type="cylinder" size="0.005 0.06" rgba="0.5 0.5 1 1" pos="0 0 0.06"/>
+                            <!-- Remote J6 Actuator (Servo mass 13.4g) located on forearm to reduce tip momentum -->
+                            <geom name="f_remote_j6_servo" type="box" size="0.01 0.01 0.015" pos="0 -0.01 0.06" rgba="0.1 0.1 0.1 1" mass="0.0134"/>
+                            <!-- Actuation Rod simulation (purely visual/mass) -->
+                            <geom name="f_actuation_rod" type="cylinder" size="0.001 0.03" pos="0 -0.01 0.10" rgba="0.8 0.8 0.8 1" mass="0.002" conaffinity="0" contype="0"/>
+                            
+                            <body name="f_wrist_pitch" pos="0 0 0.12">
+                                <!-- J4 aligns with Y (Pitch) -->
+                                <geom name="f_wrist_geom" type="box" size="0.01 0.01 0.01" pos="0 0 0"/>
                                 <joint name="f_joint4" type="hinge" axis="0 1 0" range="-90 90"/>
                                 
                                 <body name="f_wrist_roll" pos="0 0 0.015">
+                                    <!-- J5 aligns with Z (Roll) -->
                                     <geom name="f_wrist_roll_geom" type="box" size="0.01 0.01 0.01"/>
                                     <joint name="f_joint5" type="hinge" axis="0 0 1" range="-170 170"/>
                                     
                                     <body name="f_gripper" pos="0 0 0.01">
                                         <geom name="f_gripper_palm" type="box" size="0.02 0.01 0.005" rgba="0.3 0.3 0.3 1"/>
                                         <body name="f_left_finger" pos="-0.015 0 0.01">
+                                            <!-- Gripper actuated by rod from forearm remote servo -->
                                             <geom name="f_left_finger_geom" type="box" size="0.002 0.005 0.015" rgba="0.1 0.1 0.1 1"/>
                                             <joint name="f_joint6_l" type="hinge" axis="0 1 0" range="0 45"/>
                                         </body>
