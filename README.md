@@ -8,11 +8,17 @@ This project consists of two replica arms:
 2.  **Leader Arm**: A passive replica used for teleoperation, featuring a spring-loaded trigger to measure grip intensity.
 
 ## Geometric Specifications
-Based on MuJoCo grid search and analytical stress testing (50g payload target):
 *   **Upper Arm (L1)**: 12.0 cm
 *   **Forearm (L2)**: 12.0 cm
 *   **Total Reach**: 24.0 cm
-*   **Shoulder Torque Limit**: 0.18 Nm (Safe for MG90S 0.2 Nm stall)
+
+## Shoulder Gravity Compensation (Spring Tensor)
+To handle the high torque demands at full 24cm extension with a 50g payload, a shoulder **helper spring** (or strong rubber band) is required to reduce servo stress.
+
+*   **Design Goal**: The spring should passively hold the arm at ~45° when unpowered.
+*   **Target Stiffness**: $k \approx 0.14 Nm/rad$.
+*   **Servo Load Reduction**: **70%** (Peak torque drops from **0.17 Nm** to **0.05 Nm**).
+*   **CAD Implementation**: Ensure anchor points are included on the **Base** and **Shoulder (J2)** blocks for mounting an extension spring.
 
 ## Hardware Stack
 *   **Controller**: [Seeed Studio XIAO ESP32S3 Sense](https://www.seeedstudio.com/XIAO-ESP32S3-Sense-p-5631.html) (Follower) / [XIAO ESP32-C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html) (Leader).
