@@ -4,8 +4,15 @@ A tiny, 3D-printable, open-source robotic arm project inspired by the SO-ARM 101
 
 ## Project Overview
 This project consists of two replica arms:
-1.  **Follower Arm**: 6-DOF (5 Revolute + 1 Gripper) with an integrated tiny camera for AI data collection.
+1.  **Follower Arm**: 6-DOF (5 Revolute + 1 Gripper) with a **24cm reach** (12cm + 12cm) optimized for 50g payload capacity using MG90S/EMAX servos.
 2.  **Leader Arm**: A passive replica used for teleoperation, featuring a spring-loaded trigger to measure grip intensity.
+
+## Geometric Specifications
+Based on MuJoCo grid search and analytical stress testing (50g payload target):
+*   **Upper Arm (L1)**: 12.0 cm
+*   **Forearm (L2)**: 12.0 cm
+*   **Total Reach**: 24.0 cm
+*   **Shoulder Torque Limit**: 0.18 Nm (Safe for MG90S 0.2 Nm stall)
 
 ## Hardware Stack
 *   **Controller**: [Seeed Studio XIAO ESP32S3 Sense](https://www.seeedstudio.com/XIAO-ESP32S3-Sense-p-5631.html) (Follower) / [XIAO ESP32-C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html) (Leader).
