@@ -1,0 +1,126 @@
+<mujoco model="tinyarm_101">
+    <compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+    <option integrator="RK4" timestep="0.01"/>
+    
+    <default>
+        <joint armature="1" damping="1" limited="true"/>
+        <geom conaffinity="0" condim="3" density="5.0" friction="1 0.5 0.5" margin="0.001" rgba="0.8 0.6 0.4 1"/>
+        <motor ctrllimited="true" ctrlrange="-1 1"/>
+    </default>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="512"/>
+        <texture name="texplane" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 .2 .3" type="2d" width="512" height="512"/>
+        <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+
+    <worldbody>
+        <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+        <geom name="floor" pos="0 0 0" size="0 0 .25" type="plane" material="matplane"/>
+
+        <!-- Follower Arm -->
+        <body name="follower_base" pos="-0.2 0 0">
+            <geom name="f_base_geom" type="cylinder" size="0.03 0.01" rgba="0.2 0.2 0.8 1"/>
+            <joint name="f_joint1" type="hinge" axis="0 0 1" range="-170 170"/>
+            
+            <body name="f_shoulder" pos="0 0 0.02">
+                <geom name="f_shoulder_geom" type="box" size="0.015 0.015 0.02" rgba="0.2 0.2 0.8 1"/>
+                <joint name="f_joint2" type="hinge" axis="0 1 0" range="-90 90"/>
+                
+                <body name="f_upper_arm" pos="0 0 0.04">
+                    <geom name="f_upper_arm_geom" type="cylinder" size="0.005 0.05" rgba="0.5 0.5 1 1" pos="0 0 0.025"/>
+                    <body name="f_elbow" pos="0 0 0.05">
+                        <geom name="f_elbow_geom" type="box" size="0.015 0.015 0.01" rgba="0.2 0.2 0.8 1"/>
+                        <joint name="f_joint3" type="hinge" axis="0 1 0" range="-120 120"/>
+                        
+                        <body name="f_forearm" pos="0 0 0.02">
+                            <geom name="f_forearm_geom" type="cylinder" size="0.005 0.04" rgba="0.5 0.5 1 1" pos="0 0 0.02"/>
+                            <body name="f_wrist" pos="0 0 0.04">
+                                <geom name="f_wrist_geom" type="box" size="0.01 0.01 0.01" rgba="0.2 0.2 0.8 1"/>
+                                <joint name="f_joint4" type="hinge" axis="0 1 0" range="-90 90"/>
+                                
+                                <body name="f_wrist_roll" pos="0 0 0.015">
+                                    <geom name="f_wrist_roll_geom" type="box" size="0.01 0.01 0.01" rgba="0.2 0.2 0.8 1"/>
+                                    <joint name="f_joint5" type="hinge" axis="0 0 1" range="-170 170"/>
+                                    
+                                    <!-- Gripper -->
+                                    <body name="f_gripper" pos="0 0 0.01">
+                                        <geom name="f_gripper_palm" type="box" size="0.02 0.01 0.005" rgba="0.3 0.3 0.3 1"/>
+                                        <body name="f_left_finger" pos="-0.015 0 0.01">
+                                            <geom name="f_left_finger_geom" type="box" size="0.002 0.005 0.015" rgba="0.1 0.1 0.1 1"/>
+                                            <joint name="f_joint6_l" type="hinge" axis="0 1 0" range="0 45"/>
+                                        </body>
+                                        <body name="f_right_finger" pos="0.015 0 0.01">
+                                            <geom name="f_right_finger_geom" type="box" size="0.002 0.005 0.015" rgba="0.1 0.1 0.1 1"/>
+                                            <joint name="f_joint6_r" type="hinge" axis="0 -1 0" range="0 45"/>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+
+        <!-- Leader Arm -->
+        <body name="leader_base" pos="0.2 0 0">
+            <geom name="l_base_geom" type="cylinder" size="0.03 0.01" rgba="0.8 0.2 0.2 1"/>
+            <joint name="l_joint1" type="hinge" axis="0 0 1" range="-170 170"/>
+            
+            <body name="l_shoulder" pos="0 0 0.02">
+                <geom name="l_shoulder_geom" type="box" size="0.015 0.015 0.02" rgba="0.8 0.2 0.2 1"/>
+                <joint name="l_joint2" type="hinge" axis="0 1 0" range="-90 90"/>
+                
+                <body name="l_upper_arm" pos="0 0 0.04">
+                    <geom name="l_upper_arm_geom" type="cylinder" size="0.005 0.05" rgba="1 0.5 0.5 1" pos="0 0 0.025"/>
+                    <body name="l_elbow" pos="0 0 0.05">
+                        <geom name="l_elbow_geom" type="box" size="0.015 0.015 0.01" rgba="0.8 0.2 0.2 1"/>
+                        <joint name="l_joint3" type="hinge" axis="0 1 0" range="-120 120"/>
+                        
+                        <body name="l_forearm" pos="0 0 0.02">
+                            <geom name="l_forearm_geom" type="cylinder" size="0.005 0.04" rgba="1 0.5 0.5 1" pos="0 0 0.02"/>
+                            <body name="l_wrist" pos="0 0 0.04">
+                                <geom name="l_wrist_geom" type="box" size="0.01 0.01 0.01" rgba="0.8 0.2 0.2 1"/>
+                                <joint name="l_joint4" type="hinge" axis="0 1 0" range="-90 90"/>
+                                
+                                <body name="l_wrist_roll" pos="0 0 0.015">
+                                    <geom name="l_wrist_roll_geom" type="box" size="0.01 0.01 0.01" rgba="0.8 0.2 0.2 1"/>
+                                    <joint name="l_joint5" type="hinge" axis="0 0 1" range="-170 170"/>
+                                    
+                                    <!-- Trigger Mechanism -->
+                                    <body name="l_trigger" pos="0 0 0.01">
+                                        <geom name="l_handle" type="box" size="0.01 0.02 0.005" rgba="0.3 0.3 0.3 1"/>
+                                        <body name="l_trigger_finger" pos="0 0.01 0.01">
+                                            <geom name="l_trigger_geom" type="box" size="0.005 0.01 0.002" rgba="0.5 0.1 0.1 1"/>
+                                            <joint name="l_joint6_trigger" type="hinge" axis="1 0 0" range="0 30"/>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <!-- Follower Actuators -->
+        <position name="f_motor1" joint="f_joint1" kp="10"/>
+        <position name="f_motor2" joint="f_joint2" kp="10"/>
+        <position name="f_motor3" joint="f_joint3" kp="10"/>
+        <position name="f_motor4" joint="f_joint4" kp="10"/>
+        <position name="f_motor5" joint="f_joint5" kp="10"/>
+        <position name="f_motor6" joint="f_joint6_l" kp="5"/>
+        <position name="f_motor7" joint="f_joint6_r" kp="5"/>
+
+        <!-- Leader Actuators (for visualization or haptics) -->
+        <position name="l_motor1" joint="l_joint1" kp="1"/>
+        <position name="l_motor2" joint="l_joint2" kp="1"/>
+        <position name="l_motor3" joint="l_joint3" kp="1"/>
+        <position name="l_motor4" joint="l_joint4" kp="1"/>
+        <position name="l_motor5" joint="l_joint5" kp="1"/>
+        <position name="l_motor6" joint="l_joint6_trigger" kp="1"/>
+    </actuator>
+</mujoco>

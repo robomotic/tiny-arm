@@ -1,0 +1,57 @@
+<mujoco model="leader_arm">
+    <default>
+        <joint armature="1" damping="1" limited="true"/>
+        <geom conaffinity="0" condim="3" density="5.0" friction="1 0.5 0.5" margin="0.001" rgba="0.8 0.2 0.2 1"/>
+        <position kp="1"/>
+    </default>
+
+    <worldbody>
+        <body name="l_base" pos="0 0 0">
+            <geom name="l_base_geom" type="cylinder" size="0.03 0.01"/>
+            <joint name="l_joint1" type="hinge" axis="0 0 1" range="-170 170"/>
+            
+            <body name="l_shoulder" pos="0 0 0.02">
+                <geom name="l_shoulder_geom" type="box" size="0.015 0.015 0.02"/>
+                <joint name="l_joint2" type="hinge" axis="0 1 0" range="-90 90"/>
+                
+                <body name="l_upper_arm" pos="0 0 0.04">
+                    <geom name="l_upper_arm_geom" type="cylinder" size="0.005 0.05" rgba="1 0.5 0.5 1" pos="0 0 0.025"/>
+                    <body name="l_elbow" pos="0 0 0.05">
+                        <geom name="l_elbow_geom" type="box" size="0.015 0.015 0.01"/>
+                        <joint name="l_joint3" type="hinge" axis="0 1 0" range="-120 120"/>
+                        
+                        <body name="l_forearm" pos="0 0 0.02">
+                            <geom name="l_forearm_geom" type="cylinder" size="0.005 0.04" rgba="1 0.5 0.5 1" pos="0 0 0.02"/>
+                            <body name="l_wrist" pos="0 0 0.04">
+                                <geom name="l_wrist_geom" type="box" size="0.01 0.01 0.01"/>
+                                <joint name="l_joint4" type="hinge" axis="0 1 0" range="-90 90"/>
+                                
+                                <body name="l_wrist_roll" pos="0 0 0.015">
+                                    <geom name="l_wrist_roll_geom" type="box" size="0.01 0.01 0.01"/>
+                                    <joint name="l_joint5" type="hinge" axis="0 0 1" range="-170 170"/>
+                                    
+                                    <body name="l_trigger" pos="0 0 0.01">
+                                        <geom name="l_handle" type="box" size="0.01 0.02 0.005" rgba="0.3 0.3 0.3 1"/>
+                                        <body name="l_trigger_finger" pos="0 0.01 0.01">
+                                            <geom name="l_trigger_geom" type="box" size="0.005 0.01 0.002" rgba="0.5 0.1 0.1 1"/>
+                                            <joint name="l_joint6_trigger" type="hinge" axis="1 0 0" range="0 30"/>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <position name="l_motor1" joint="l_joint1"/>
+        <position name="l_motor2" joint="l_joint2"/>
+        <position name="l_motor3" joint="l_joint3"/>
+        <position name="l_motor4" joint="l_joint4"/>
+        <position name="l_motor5" joint="l_joint5"/>
+        <position name="l_motor6" joint="l_joint6_trigger"/>
+    </actuator>
+</mujoco>
