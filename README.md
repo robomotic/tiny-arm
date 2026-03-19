@@ -22,12 +22,10 @@ To handle the high torque demands at full 24cm extension with a 50g payload, a s
 
 ## Hardware Stack
 *   **Controller**: [Seeed Studio XIAO ESP32S3 Sense](https://www.seeedstudio.com/XIAO-ESP32S3-Sense-p-5631.html) (Follower) / [XIAO ESP32-C3](https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html) (Leader).
-*   **Expansion**: [XIAO Expansion Board](https://www.seeedstudio.com/Seeeduino-XIAO-Expansion-board-p-4746.html).
+*   **Servo Driver**: [Adafruit 16-Channel 12-bit PWM/Servo Driver - PCA9685](https://www.adafruit.com/product/815).
 *   **Servos**: **EMAX ES08MA II** (12g, Metal Gear) or **MG90S** (Budget).
 *   **Camera**: OV2640 2MP (included with XIAO Sense).
-*   **Feedback**: 
-    *   **Follower**: None (Open-loop PWM).
-    *   **Leader**: Potentiometers in joints + Trigger mechanism for grip.
+*   **Communication**: I2C (SDA/SCL) from XIAO to PCA9685.
 
 ## Cost Estimate (2-Arm Setup)
 
@@ -35,7 +33,7 @@ To handle the high torque demands at full 24cm extension with a 50g payload, a s
 | :--- | :---: | :---: |
 | Servos / Pots | $60.00 | $45.00 |
 | MCUs (S3 + C3) | $28.00 | $28.00 |
-| Expansion Boards | $30.00 | $30.00 |
+| Adafruit PCA9685 | $15.00 | $15.00 |
 | Trigger (FSR/Pot) | $10.00 | $10.00 |
 | Battery & Power | $24.00 | $24.00 |
 | Filament & Misc | $20.00 | $20.00 |
