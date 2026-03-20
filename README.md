@@ -1,6 +1,6 @@
 # TinyArm 101: 6-DOF Miniature Robotic Arm
 
-A tiny, 3D-printable, open-source robotic arm project inspired by the SO-ARM 101. Designed for **LeRobot** compatibility and based on the **Seeed Studio XIAO** ecosystem.
+A tiny, 3D-printable, open-source robotic arm project inspired by the **SO-ARM100** by [TheRobotStudio](https://github.com/TheRobotStudio/SO-ARM100). Designed for **LeRobot** compatibility and based on the **Seeed Studio XIAO** ecosystem.
 
 ## Project Overview
 This project consists of two replica arms:
@@ -27,6 +27,11 @@ To handle the high torque demands at full 24cm extension with a 50g payload, a s
 *   **Camera**: OV2640 2MP (included with XIAO Sense).
 *   **Communication**: I2C (SDA/SCL) from XIAO to PCA9685.
 
+## Power & Voltage
+The servos (**EMAX ES08MA II** / **MG90S**) are rated for a strict **4.8V to 6.0V** range.
+*   **Optimal Performance**: Running the system at exactly **6.0V** increases the stall torque from ~0.18 Nm to **0.22 Nm** compared to a 5V supply.
+*   **Warning**: Do **NOT** provide raw 7.4V (2S LiPo) to the servos or PCA9685. You must use a **High-Current 6V Step-Down Converter (Buck/BEC)** that can handle at least 3A continuous (since each servo can draft ~850mA at stall).
+
 ## Cost Estimate (2-Arm Setup)
 
 | Component | Mid (EMAX ES08MA II) | Budget (MG90S) |
@@ -41,6 +46,7 @@ To handle the high torque demands at full 24cm extension with a 50g payload, a s
 
 ## Design & Simulation
 *   **Editor**: [OnShape](https://www.onshape.com/) (Open Source Project).
+*   **CAD Guidelines**: [CAD Design Guidelines](cad_guidelines.md)
 *   **Deliverables**:
     *   `STL`: Ready for 3D printing.
     *   `STEP`: For assembly and modification.
